@@ -98,7 +98,7 @@ public:
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides support for the CHGNAME command", VF_OPTCOMMON | VF_VENDOR);
+		return Version("Provides support for the CHGNICK command", VF_OPTCOMMON | VF_VENDOR);
 	}
 };
 
