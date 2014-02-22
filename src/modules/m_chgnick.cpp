@@ -35,38 +35,29 @@ class CommandChgNick : public Command
 		TRANSLATE2(TR_NICK, TR_TEXT);
 	}
 
-	CmdResult Handle(const std::vector<std::string>& parameters, User *user)
+	CmdResult Handle(const std::vector<std::string> &parameters, User *user)
 	{
 		User* target = ServerInstance->FindNick(parameters[0]);
 
 		if ((!target) || (target->registered != REG_ALL))
 		{
-			user->WriteNotice("*** No such nickname: '" + parameters[0] + "'");
+			user->WriteNumeric(ERR_NOSUCHNICK, "%s :No such nick/channel", parameters[0].c_str());
 			return CMD_FAILURE;
 		}
 
-		/* Do local sanity checks and bails */
-		if (IS_LOCAL(user))
+		if (parameters[1].empty())
 		{
-			if (!ServerInstance->IsNick(parameters[1]))
-			{
-				user->WriteNotice("*** Invalid nickname '" + parameters[1] + "'");
-				return CMD_FAILURE;
-			}
-			if (parameters[1].empty())
-			{
-				user->WriteNotice("*** CHGNICK: nick must be specified");
-				return CMD_FAILURE;
-			}
+			user->WriteServ("NOTICE %s :*** CHGNICK: nick must be specified", user->nick.c_str());;
+			return CMD_FAILURE;
+		}
 
 			user->WriteNumeric(947, "%s :Nickname now changed.", parameters[1].c_str());
-		}
 
 		/* If we made it this far, extend the user */
 		if (IS_LOCAL(target))
 		{
 			std::string oldnick = target->nick;
-			if (target->ForceNickChange(parameters[1]))
+			if (target->ChangeNick(parameters[1]))
 				ServerInstance->SNO->WriteGlobalSno('a', user->nick+" used CHGNICK to change "+oldnick+" to "+parameters[1]);
 			else
 			{
@@ -96,7 +87,16 @@ public:
 	{
 	}
 
-	Version GetVersion() CXX11_OVERRIDE
+	void init()
+	{
+		ServerInstance->Modules->AddService(cmd);
+	}
+
+	virtual ~ModuleChgNick()
+	{
+	}
+
+	virtual Version GetVersion()
 	{
 		return Version("Provides support for the CHGNICK command", VF_OPTCOMMON | VF_VENDOR);
 	}
