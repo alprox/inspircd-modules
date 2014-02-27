@@ -7,4 +7,5 @@ m_censor that does not censor http protocol links.
 
 # TODO: m_filter + m_censor, configurable exclusion
 regexp censoring and configurable censor exclusion
+
 nick based filtering
