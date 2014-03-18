@@ -5,7 +5,9 @@ credits go to the authors of m_chgname and m_nicklock.
 # m_censor
 m_censor that does not censor http protocol links.
 
-# TODO: m_filter + m_censor, configurable exclusion
+# TODO:
+m_filter + m_censor:
+
 regexp censoring and configurable censor exclusion
 
-nick based filtering
+nick based filtering/exclusion?
