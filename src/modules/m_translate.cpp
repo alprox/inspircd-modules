@@ -62,12 +62,9 @@ class ModuleTranslate : public Module
 	ModuleTranslate() : tu(this), tc(this) { }
 	void init()
 	{
-	/* Read the configuration file on startup.
-	 * */
-	OnRehash(NULL);
 	ServerInstance->Modules->AddService(tu);
 	ServerInstance->Modules->AddService(tc);
-	Implementation eventlist[] = { I_OnRehash, I_OnUserPreMessage, I_OnUserPreNotice };
+	Implementation eventlist[] = { I_OnUserPreMessage, I_OnUserPreNotice };
 	ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
